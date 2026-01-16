@@ -34,7 +34,7 @@ temp4_r1, temp4_r2, energi4 = kör_simulation_två_rum(T1_start, T2_start,T_ute,
 
 # Skriv ut energiförbrukning
 
-print("Energiförbrukning (timmar elementet är på): 48" )
+print("Energiförbrukning (timmar elementet är på):" )
 print("Experiment 1 – Referensfall:", energi1)
 print("Experiment 2 – Lägre värmeöverföring:", energi2)
 print("Experiment 3 – Sämre isolering:", energi3)
