@@ -1,87 +1,63 @@
 import matplotlib.pyplot as plt
-from beräkningar2 import run_simulation_two_rooms
+from beräkningar2 import kör_simulation_två_rum
 
-# =========================
+
 # Gemensamma startvärden (referensfall)
-# =========================
+
 T1_start = 17          # Starttemperatur rum 1
 T2_start = 15          # Starttemperatur rum 2
 T_ute = -5             # Utomhustemperatur
-hours = 48             # Simuleringstid
+timmar = 48             # Simuleringstid
 P = 2                  # Elementets effekt
-T_desired = 21         # Önskad temperatur i rum 1
+T_önskad = 21         # Önskad temperatur i rum 1
 
-# =========================
+
 # EXPERIMENT 1 – Referensfall
-# =========================
-temps1_r1, temps1_r2, energy1 = run_simulation_two_rooms(
-    T1_start, T2_start,
-    T_ute, T_desired,
-    k_forlust_1=0.02,
-    k_forlust_2=0.02,
-    k_vagg=0.9,
-    P=P,
-    hours=hours
-)
 
-# =========================
+temp1_r1, temp1_r2, energi1 = kör_simulation_två_rum(T1_start, T2_start,T_ute, T_önskad,k_forlust_1=0.02,k_forlust_2=0.02,k_vagg=0.9,P=P,timmar=timmar)
+
+
 # EXPERIMENT 2 – Lägre värmeöverföring mellan rum
-# =========================
-temps2_r1, temps2_r2, energy2 = run_simulation_two_rooms(
-    T1_start, T2_start,
-    T_ute, T_desired,
-    k_forlust_1=0.02,
-    k_forlust_2=0.02,
-    k_vagg=0.3,
-    P=P,
-    hours=hours
-)
 
-# =========================
+temp2_r1, temp2_r2, energi2 = kör_simulation_två_rum(T1_start, T2_start,T_ute, T_önskad,k_forlust_1=0.02,k_forlust_2=0.02,k_vagg=0.3,P=P,timmar=timmar)
+
+
 # EXPERIMENT 3 – Sämre isolering i båda rummen
-# =========================
-temps3_r1, temps3_r2, energy3 = run_simulation_two_rooms(
-    T1_start, T2_start,
-    T_ute, T_desired,
-    k_forlust_1=0.05,
-    k_forlust_2=0.05,
-    k_vagg=0.9,
-    P=P,
-    hours=hours
-)
 
-# =========================
+temp3_r1, temp3_r2, energi3 = kör_simulation_två_rum(T1_start, T2_start,T_ute, T_önskad,k_forlust_1=0.05,k_forlust_2=0.05,k_vagg=0.9,P=P,timmar=timmar)
+
+
 # EXPERIMENT 4 – Bättre isolering i rum utan element
-# =========================
-temps4_r1, temps4_r2, energy4 = run_simulation_two_rooms(
-    T1_start, T2_start,
-    T_ute, T_desired,
-    k_forlust_1=0.05,
-    k_forlust_2=0.02,
-    k_vagg=0.9,
-    P=P,
-    hours=hours
-)
 
-# =========================
+temp4_r1, temp4_r2, energi4 = kör_simulation_två_rum(T1_start, T2_start,T_ute, T_önskad,k_forlust_1=0.05,k_forlust_2=0.02,k_vagg=0.9,P=P,timmar=timmar)
+
+
 # Skriv ut energiförbrukning
-# =========================
-print("Energiförbrukning (timmar elementet är på): 48" )
-print("Experiment 1 – Referensfall:", energy1)
-print("Experiment 2 – Lägre värmeöverföring:", energy2)
-print("Experiment 3 – Sämre isolering:", energy3)
-print("Experiment 4 – Bättre isolering rum 2:", energy4)
 
-# =========================
+print("Energiförbrukning (timmar elementet är på): 48" )
+print("Experiment 1 – Referensfall:", energi1)
+print("Experiment 2 – Lägre värmeöverföring:", energi2)
+print("Experiment 3 – Sämre isolering:", energi3)
+print("Experiment 4 – Bättre isolering rum 2:", energi4)
+
+
 # Funktion för att rita grafer
-# =========================
-def plot_temperatures(temps_r1, temps_r2, title):
+
+def plot_temperatures(temp_r1, temp_r2, title):
     plt.figure()
-    plt.plot(temps_r1, label="Rum 1")
-    plt.plot(temps_r2, label="Rum 2")
+    plt.plot(temp_r1, label="Rum 1")
+    plt.plot(temp_r2, label="Rum 2")
     plt.xlabel("Tid (timmar)")
     plt.ylabel("Temperatur (°C)")
     plt.title(title)
     plt.legend()
     plt.grid()
     plt.show()
+
+
+# Rita grafer för varje experiment
+
+plot_temperatures(temp1_r1, temp1_r2, "Experiment 1 – Referensfall")
+plot_temperatures(temp2_r1, temp2_r2, "Experiment 2 – Lägre värmeöverföring")
+plot_temperatures(temp3_r1, temp3_r2, "Experiment 3 – Sämre isolering")
+plot_temperatures(temp4_r1, temp4_r2, "Experiment 4 – Bättre isolering i rum 2")
