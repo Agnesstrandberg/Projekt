@@ -1,0 +1,128 @@
+def thermostat(T, T_desired):
+    """
+    Enkel termostat:
+    Returnerar 1 om elementet ska vara på, annars 0
+    """
+    if T < T_desired:
+        return 1
+    else:
+        return 0
+
+
+def next_temperature(T, T_ute, k_forlust, P, u):
+    """
+    Beräknar temperaturen nästa timme
+    """
+    return T + k_forlust * (T_ute - T) + u * P
+
+
+def run_simulation(
+    T_start,
+    T_ute,
+    T_desired,
+    k_forlust,
+    P,
+    hours):
+
+    """
+    Kör simuleringen och returnerar:
+    - lista med temperaturer
+    - energiförbrukning (antal timmar elementet är på)
+    """
+    T = T_start
+    temperatures = []
+    energy = 0
+
+    for _ in range(hours):
+        temperatures.append(T)
+
+        u = thermostat(T, T_desired)
+        if u == 1:
+            energy += 1
+
+        T = next_temperature(T, T_ute, k_forlust, P, u)
+
+    return temperatures, energy
+
+
+
+
+
+# PROGRAM 2
+# =========================
+# Temperaturuppdatering för två rum
+# =========================
+def next_temperature_two_rooms(
+    T1, T2,
+    T_ute,
+    k_forlust_1, k_forlust_2,
+    k_vagg,
+    P, u
+):
+    """
+    Beräknar temperaturen nästa timme
+    för två rum där endast rum 1 har element
+    """
+
+    # Rum 1 (med element)
+    T1_new = (
+        T1
+        + k_forlust_1 * (T_ute - T1)
+        + k_vagg * (T2 - T1)
+        + u * P
+    )
+
+    # Rum 2 (utan element)
+    T2_new = (
+        T2
+        + k_forlust_2 * (T_ute - T2)
+        + k_vagg * (T1 - T2)
+    )
+
+    return T1_new, T2_new
+
+
+# =========================
+# Simulering för två rum
+# =========================
+def run_simulation_two_rooms(
+    T1_start, T2_start,
+    T_ute,
+    T_desired,
+    k_forlust_1, k_forlust_2,
+    k_vagg,
+    P,
+    hours
+):
+    """
+    Kör simuleringen och returnerar:
+    - temperaturer i rum 1
+    - temperaturer i rum 2
+    - energiförbrukning (timmar elementet är på)
+    """
+
+    T1 = T1_start
+    T2 = T2_start
+
+    temps1 = []
+    temps2 = []
+    energy = 0
+
+    for _ in range(hours):
+        temps1.append(T1)
+        temps2.append(T2)
+
+        # Termostat styr endast rum 1
+        u = thermostat(T1, T_desired)
+        if u == 1:
+            energy += 1
+
+        T1, T2 = next_temperature_two_rooms(
+            T1, T2,
+            T_ute,
+            k_forlust_1, k_forlust_2,
+            k_vagg,
+            P, u
+        )
+
+    return temps1, temps2, energy
